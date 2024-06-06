@@ -10,11 +10,11 @@ RUN mkdir -p /home/node/.npm-cache && chown -R node:node /home/node/.npm-cache
 COPY package*.json ./
 RUN npm install
 
-# Cambiar a usuario node después de instalar dependencias
-USER node
-
-# Configurar el caché de npm
+# Configurar el caché de npm como root
 RUN npm config set cache /home/node/.npm-cache --global
+
+# Cambiar a usuario node después de configurar npm
+USER node
 
 # Copiar el resto del código
 COPY . .
