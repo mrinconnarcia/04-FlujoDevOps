@@ -17,6 +17,7 @@ pipeline {
             steps {
                 script {
                     docker.image(DOCKER_IMAGE).inside {
+                        sh 'npm config set cache /home/jenkins/.npm-cache --global'
                         sh 'npm install'
                         sh 'npm test'
                     }
