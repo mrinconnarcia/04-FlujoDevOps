@@ -3,18 +3,20 @@ FROM node:14
 # Crear directorio de trabajo
 WORKDIR /app
 
+# Crear el directorio de caché y establecer permisos
+RUN mkdir -p /home/node/.npm-cache && chown -R node:node /home/node/.npm-cache
+
 # Copiar y instalar dependencias
 COPY package*.json ./
 
-# Instalar dependencias como root
-USER root
-RUN npm install
+# Cambiar a usuario node
+USER node
 
-# Cambiar el caché de npm a un directorio accesible
+# Configurar el caché de npm
 RUN npm config set cache /home/node/.npm-cache --global
 
-# Cambiar de nuevo al usuario node
-USER node
+# Instalar dependencias
+RUN npm install
 
 # Copiar el resto del código
 COPY . .
