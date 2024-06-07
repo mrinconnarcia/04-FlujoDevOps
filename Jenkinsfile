@@ -3,6 +3,7 @@ pipeline {
 
     environment {
         DOCKERIMAGE = "node-hello-world"
+        CONTAINERNAME = "node-hello-world-container"
     }
 
     stages {
@@ -38,13 +39,13 @@ pipeline {
             steps {
                 script {
                     // Detener y eliminar el contenedor anterior si existe
-                    def previousContainer = sh(script: "docker ps -q --filter 'name=node-hello-world'", returnStdout: true).trim()
+                    def previousContainer = sh(script: "docker ps -q --filter 'name=${CONTAINERNAME}'", returnStdout: true).trim()
                     if (previousContainer) {
                         sh "docker stop ${previousContainer}"
                         sh "docker rm ${previousContainer}"
                     }
-                    // Ejecutar el nuevo contenedor
-                    docker.image(DOCKERIMAGE).run('-d -p 3004:3000 --name node-hello-world')
+                    // Ejecutar el nuevo contenedor con un nombre específico
+                    docker.image(DOCKERIMAGE).run("-d -p 3004:3000 --name ${CONTAINERNAME}")
                 }
             }
         }
